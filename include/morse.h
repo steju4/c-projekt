@@ -1,79 +1,78 @@
+/**
+ * @file morse.h
+ * @brief Header-Datei für das Morsecode-Tool.
+ *
+ * Diese Datei deklariert alle öffentlich zugänglichen Funktionen
+ * und Konstanten, die zum Codieren und Dekodieren von Morsezeichen benötigt werden.
+ * Sie wird von der main.c verwendet und trennt Header- und Implementierungscode.
+ */
+
 #ifndef MORSE_H
 #define MORSE_H
 
+#include <stdbool.h>
+
 /**
- * @file morse.h
- * @brief Deklarationen für Morsecode-Funktionen.
- * @author Julian Stengele
- * @date 2023-10-27 // Oder das aktuelle Datum
+ * @brief Konvertiert ein einzelnes alphanumerisches Zeichen in Morsecode.
  *
- * Diese Header-Datei deklariert die Funktionen, die für das Codieren von Text
- * in Morsecode und das Decodieren von Morsecode zurück in Text benötigt werden.
- * Sie enthält auch Deklarationen für Hilfsfunktionen wie die Ausgabe von
- * Programminformationen und Hilfetexten.
- */
-
-#include <stdbool.h> // Für den Typ bool
-
-/**
- * @brief Codiert ein einzelnes Zeichen in seine Morsecode-Repräsentation.
- * @param c Das zu codierende Zeichen.
- * @return Ein konstanter String, der den Morsecode für das Zeichen darstellt,
- *         oder "*" wenn das Zeichen nicht in der Morse-Map definiert ist.
- * @see morse_map
+ * Diese Funktion sucht das übergebene Zeichen in der internen Mapping-Tabelle
+ * und gibt den zugehörigen Morsecode-String zurück. Zeichen, die nicht enthalten
+ * sind (z. B. Umlaute oder Sonderzeichen außerhalb des definierten Umfangs),
+ * werden durch einen Stern ('*') dargestellt.
+ *
+ * @param c Das zu codierende Zeichen (Groß-/Kleinbuchstabe, Ziffer oder Symbol).
+ * @return Zeiger auf den Morsecode als nullterminierten String oder "*" bei Fehler.
  */
 const char* encode_char(char c);
 
 /**
- * @brief Decodiert einen einzelnen Morsecode-String zurück in ein Zeichen.
- * @param code Der zu decodierende Morsecode-String (z.B. ".-").
- * @return Das decodierte Zeichen (z.B. 'A'),
- *         oder '*' wenn der Morsecode nicht in der Morse-Map definiert ist.
- * @see morse_map
+ * @brief Wandelt einen Morsecode-String in ein einzelnes Zeichen zurück.
+ *
+ * Diese Funktion durchsucht die Morsecode-Mapping-Tabelle nach einer exakten Übereinstimmung
+ * mit dem übergebenen Morsecode-String und gibt das zugehörige Zeichen zurück.
+ * Bei ungültigen oder unbekannten Morsezeichen wird '*' zurückgegeben.
+ *
+ * @param code Morsecode als nullterminierter String (z. B. "--..--").
+ * @return Entsprechendes Klartextzeichen (A–Z, 0–9, Symbol) oder '*' bei unbekanntem Code.
  */
 char decode_morse(const char* code);
 
 /**
- * @brief Codiert einen kompletten Text in Morsecode.
+ * @brief Wandelt einen kompletten Text in Morsecode um und gibt ihn aus.
  *
- * Die Ausgabe erfolgt auf stdout. Buchstaben innerhalb eines Wortes werden durch ein
- * Leerzeichen getrennt. Wörter werden standardmäßig durch drei Leerzeichen getrennt,
- * es sei denn, der slash_mode ist aktiviert. Newlines und Carriage Returns im
- * Eingabetext werden ignoriert. Am Ende der gesamten Ausgabe wird ein Newline-Zeichen gefügt.
- * @param text Der zu codierende Eingabetext.
- * @param slash_mode Wenn `true`, werden Wörter mit " / " (SP/SP) anstelle von
- *                   "   " (SPSPSP) getrennt.
+ * Die Funktion nimmt einen beliebigen C-String entgegen und konvertiert jedes
+ * Zeichen in das entsprechende Morsezeichen. Wörter werden je nach Einstellung
+ * durch " / " oder drei Leerzeichen getrennt. Nicht abbildbare Zeichen führen
+ * zu einem Stern ('*') in der Ausgabe.
+ *
+ * @param text Eingabetext als nullterminierter C-String.
+ * @param slash_mode true, wenn Worttrennung mit "/" erfolgen soll; false für 3* "SPACE".
  */
 void encode_text(const char* text, bool slash_mode);
 
 /**
- * @brief Decodiert einen kompletten Morsecode-String zurück in Text.
+ * @brief Wandelt Morsecode zurück in Klartext und gibt das Ergebnis aus.
  *
- * Die Eingabe wird als Morsecode interpretiert, wobei '.' und '-' als Morse-Signale
- * und Leerzeichen sowie '/' als Trenner dienen. Die Ausgabe des decodierten Textes
- * erfolgt auf stdout. Ein einzelnes Leerzeichen zwischen Morse-Codes wird als
- * Buchstabentrenner interpretiert (d.h. kein expliziter Output). Drei aufeinanderfolgende
- * Leerzeichen oder ein '/' (optional umgeben von Leerzeichen) werden als Worttrenner
- * interpretiert und als einzelnes Leerzeichen im Ausgabetext dargestellt.
- * Newlines und Carriage Returns im Eingabecode werden ignoriert.
- * Am Ende der gesamten Ausgabe wird ein Newline-Zeichen gefügt.
- * @param morse_input Der zu decodierende Morsecode-String.
+ * Diese Funktion verarbeitet eine Morsecode-Zeile, bei der Morsezeichen durch
+ * Leerzeichen und Wörter durch drei Leerzeichen oder "/" getrennt sind.
+ * Unbekannte Morsezeichen werden durch '*' ersetzt.
+ *
+ * @param morse_input Nullterminierter String mit Morsecode.
  */
 void decode_text(const char* morse_input);
 
 /**
- * @brief Gibt den Hilfetext des Programms auf stdout aus.
+ * @brief Gibt eine strukturierte Hilfeübersicht für den Nutzer auf stdout aus.
  *
- * Listet die Verwendung des Programms und alle verfügbaren Kommandozeilenoptionen
- * mit kurzen Erklärungen auf.
+ * Die Hilfe listet alle verfügbaren Optionen, Flags und deren Beschreibung auf.
  */
-void print_help();
+void print_help(void);
 
 /**
- * @brief Gibt Informationen über den Programmierer im JSON-Format auf stdout aus.
+ * @brief Gibt Informationen zum Autor des Programms im JSON-Format aus.
  *
- * Enthält Vorname, Nachname, Studiengang und Kontakt-E-Mail-Adresse.
+ * Enthält Vorname, Nachname, Studiengang und E-Mail-Adresse.
  */
-void print_programmer_info();
+void print_programmer_info(void);
 
 #endif // MORSE_H

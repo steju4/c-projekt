@@ -4,14 +4,25 @@
 #include <ctype.h>
 #include <getopt.h>
 #include <stdbool.h>
-
 #include "morse.h"
 
+/**
+ * @brief Repräsentiert eine Zuordnung von Klartextzeichen zu Morsecode.
+ *
+ * Diese Struktur wird verwendet, um ein alphanumerisches Zeichen (oder Symbol)
+ * einem zugehörigen Morsecode-String zuzuordnen.
+ */
 typedef struct {
-    const char* character;
-    const char* morse;
+    const char* character;  /**< Das Klartextzeichen (einzelnes Zeichen als String). */
+    const char* morse;      /**< Der entsprechende Morsecode (z. B. ".-" für A). */
 } MorseMapping;
 
+/**
+ * @brief Statische Tabelle mit allen unterstützten Morsecode-Zuordnungen.
+ *
+ * Diese Tabelle enthält die vollständige Mapping-Tabelle für Buchstaben A–Z,
+ * Ziffern 0–9 sowie zugelassene Satz- und Sonderzeichen.
+ */
 static MorseMapping morse_map[] = {
     {"A", ".-"}, {"B", "-..."}, {"C", "-.-."}, {"D", "-.."}, {"E", "."},
     {"F", "..-."}, {"G", "--."}, {"H", "...."}, {"I", ".."}, {"J", ".---"},
@@ -27,8 +38,24 @@ static MorseMapping morse_map[] = {
     {"_", "..--.-"}, {"(", "-.--."}, {")", "-.--.-"}, {"/", "-..-."},
     {"@", ".--.-."}
 };
+
+/**
+ * @brief Länge der Morsecode-Mapping-Tabelle.
+ *
+ * Wird zur Iteration über das `morse_map`-Array verwendet.
+ */
 static const size_t map_len = sizeof(morse_map) / sizeof(MorseMapping);
 
+/**
+ * @brief Konvertiert ein einzelnes Zeichen in den zugehörigen Morsecode.
+ *
+ * Das übergebene Zeichen wird in Großbuchstaben umgewandelt und mit der internen
+ * Morsecode-Tabelle verglichen. Wird keine passende Zuordnung gefunden, gibt die
+ * Funktion einen Stern ('*') zurück.
+ *
+ * @param c Das zu konvertierende Zeichen.
+ * @return Zeiger auf den Morsecode-String oder "*" bei unbekanntem Zeichen.
+ */
 const char* encode_char(char c) {
     char upper = toupper((unsigned char)c);
     char str[2] = {upper, '\0'};
@@ -40,6 +67,16 @@ const char* encode_char(char c) {
     return "*";
 }
 
+/**
+ * @brief Wandelt einen Morsecode-String in ein einzelnes Zeichen zurück.
+ *
+ * Die Funktion vergleicht den übergebenen Morsecode mit der Mapping-Tabelle
+ * und gibt das zugehörige Zeichen zurück. Bei einem unbekannten Code wird
+ * ein Stern ('*') zurückgegeben.
+ *
+ * @param code Nullterminierter String mit einem Morsecode (z. B. ".-" für A).
+ * @return Der Klartextbuchstabe (Großbuchstabe, Ziffer oder Symbol) oder '*' bei Fehler.
+ */
 char decode_morse(const char* code) {
     for (size_t i = 0; i < map_len; ++i) {
         if (strcmp(code, morse_map[i].morse) == 0) {
@@ -49,6 +86,18 @@ char decode_morse(const char* code) {
     return '*';
 }
 
+/**
+ * @brief Codiert einen vollständigen Text in Morsecode und gibt ihn auf stdout aus.
+ *
+ * Die Funktion wandelt Zeichen des Eingabetexts entsprechend der Mapping-Tabelle
+ * in Morsecode um. Nicht unterstützte Zeichen werden als Stern ('*') dargestellt.
+ *
+ * Buchstaben werden durch ein Leerzeichen getrennt, Wörter wahlweise durch drei Leerzeichen
+ * oder (wenn @p slash_mode aktiviert ist) durch den Separator " / ".
+ *
+ * @param text Nullterminierter C-String mit dem Eingabetext.
+ * @param slash_mode true = Worttrennung mit Slash; false = drei Leerzeichen.
+ */
 void encode_text(const char* text, bool slash_mode) {
     bool first_word = true;
     bool first_char = true;
@@ -58,7 +107,7 @@ void encode_text(const char* text, bool slash_mode) {
             continue;
         } else if (*text == ' ') {
             if (!first_char) {
-                 printf(slash_mode ? " / " : "   ");
+                printf(slash_mode ? " / " : "   ");
             }
             text++;
             first_char = true;
@@ -74,60 +123,62 @@ void encode_text(const char* text, bool slash_mode) {
     putchar('\n');
 }
 
-void decode_text(const char* morse_input) { 
+/**
+ * @brief Dekodiert einen Morsecode-Text zu Klartext und gibt ihn aus.
+ *
+ * Die Funktion verarbeitet Morsezeichen, die durch Leerzeichen oder Slashes getrennt sind.
+ * Einfache Leerzeichen trennen Buchstaben, drei Leerzeichen oder ein Slash trennen Wörter.
+ *
+ * Ungültige Morsezeichen werden durch '*' ersetzt. Zeilenumbrüche werden ignoriert.
+ *
+ * @param morse_input Nullterminierter String mit Morsecode.
+ */
+void decode_text(const char* morse_input) {
     char buffer[16] = {0};
     int idx = 0;
-    int space_count = 0; 
+    int space_count = 0;
 
     while (*morse_input) {
         if (*morse_input == '.' || *morse_input == '-') {
             if (idx < sizeof(buffer) - 1) {
                 buffer[idx++] = *morse_input;
             }
-            space_count = 0; // Morsezeichen unterbricht Leerzeichenzählung
+            space_count = 0;
         } else if (*morse_input == ' ' || *morse_input == '/') {
-            if (idx > 0) { // Vorherige Morse-Sequenz abschließen
-                buffer[idx] = '\0';
-                char decoded = decode_morse(buffer);
-                printf("%c", decoded);
-                idx = 0;
-            }
-            space_count++;
-            if (space_count == 3 || (*morse_input == '/' && space_count >= 1) ) {
-                // Worttrenner: 3 Spaces ODER ein Slash (umgeben von optionalen Spaces,
-                // die bereits als Buchstabentrenner verarbeitet wurden oder den space_count erhöhen)
-                printf(" ");
-                space_count = 0; // Worttrenner setzt Zählung zurück
-            } else if (space_count > 0 && space_count < 3 && *morse_input == ' ') {
-                // Dies ist ein Buchstabentrenner (1 oder 2 Spaces)
-                // Wird implizit durch das Dekodieren des nächsten Zeichens behandelt
-                // oder durch den Worttrenner bei 3 Spaces.
-                // Wir tun hier nichts, da der Buchstabentrenner durch das Dekodieren
-                // des nächsten Zeichens und das Fehlen eines Leerzeichens davor entsteht.
-            }
-        } else if (*morse_input == '\n' || *morse_input == '\r') {
-            // Ignorieren, aber vorherige Sequenz abschließen
             if (idx > 0) {
                 buffer[idx] = '\0';
                 char decoded = decode_morse(buffer);
                 printf("%c", decoded);
                 idx = 0;
             }
-            space_count = 0; // Newline resettet auch
+            space_count++;
+            if (space_count == 3 || (*morse_input == '/' && space_count >= 1)) {
+                printf(" ");
+                space_count = 0;
+            }
+        } else if (*morse_input == '\n' || *morse_input == '\r') {
+            if (idx > 0) {
+                buffer[idx] = '\0';
+                char decoded = decode_morse(buffer);
+                printf("%c", decoded);
+                idx = 0;
+            }
+            space_count = 0;
         }
-        // Andere Zeichen werden ignoriert
         morse_input++;
     }
 
-    // Letztes Zeichen decodieren, falls vorhanden
     if (idx > 0) {
         buffer[idx] = '\0';
         char decoded = decode_morse(buffer);
         printf("%c", decoded);
     }
-    printf("\n"); // Newline am Ende der gesamten Ausgabe
+    printf("\n");
 }
 
+/**
+ * @brief Gibt eine detaillierte Hilfeübersicht mit allen verfügbaren Optionen aus.
+ */
 void print_help() {
     printf("Verwendung: morse [Optionen] [Dateien oder Texte]\n");
     printf("Optionen:\n");
@@ -139,6 +190,9 @@ void print_help() {
     printf("  -h, --help               Diese Hilfe anzeigen\n");
 }
 
+/**
+ * @brief Gibt die Programmautoreninformationen im JSON-Format aus.
+ */
 void print_programmer_info() {
     printf("{\n");
     printf("  \"firstname\": \"Julian\",\n");
@@ -148,6 +202,17 @@ void print_programmer_info() {
     printf("}\n");
 }
 
+/**
+ * @brief Hauptfunktion: Steuert das Parsen der Kommandozeilenargumente und Programmablauf.
+ *
+ * Je nach Optionen wird die Eingabe als Datei oder über stdin gelesen und in Morsecode
+ * codiert oder dekodiert. Auch Optionen wie Hilfeausgabe, Programmer-Info und Dateiausgabe
+ * werden hier behandelt.
+ *
+ * @param argc Anzahl der übergebenen Argumente.
+ * @param argv Array der Argumente.
+ * @return 0 bei Erfolg, 1 bei Fehlern.
+ */
 int main(int argc, char** argv) {
     int opt;
     int option_index = 0;
