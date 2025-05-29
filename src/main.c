@@ -51,29 +51,33 @@ char decode_morse(const char* code) {
 
 void encode_text(const char* text, bool slash_mode) {
     bool first_word = true;
+    bool first_char = true;
     while (*text) {
         if (*text == '\n' || *text == '\r') {
             text++;
             continue;
         } else if (*text == ' ') {
-            printf(slash_mode ? " / " : "   ");
+            if (!first_char) {
+                 printf(slash_mode ? " / " : "   ");
+            }
             text++;
-            first_word = true;
+            first_char = true;
         } else {
-            if (!first_word) printf(" ");
+            if (!first_word && !first_char) printf(" ");
             const char* code = encode_char(*text);
             printf("%s", code);
             text++;
             first_word = false;
+            first_char = false;
         }
     }
     putchar('\n');
 }
 
-void decode_text(const char* morse_input) { // Renamed to avoid conflict
+void decode_text(const char* morse_input) { 
     char buffer[16] = {0};
     int idx = 0;
-    int space_count = 0; // Zählt aufeinanderfolgende Leerzeichen/Slashes
+    int space_count = 0; 
 
     while (*morse_input) {
         if (*morse_input == '.' || *morse_input == '-') {
@@ -223,7 +227,6 @@ int main(int argc, char** argv) {
             fclose(f);
         }
     } else {
-        fprintf(stderr, "Warte auf Eingabe von stdin... (Strg+Z/Strg+D + Enter zum Beenden)\n");
         char input[1024];
         while (fgets(input, sizeof(input), stdin)) {
             if (decode)
