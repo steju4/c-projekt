@@ -1,0 +1,212 @@
+\doxysection{src/main.c File Reference}
+\hypertarget{main_8c}{}\label{main_8c}\index{src/main.c@{src/main.c}}
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$ctype.\+h$>$}\newline
+{\ttfamily \#include $<$getopt.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include "{}morse.\+h"{}}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_morse_mapping}{Morse\+Mapping}}
+\begin{DoxyCompactList}\small\item\em Repräsentiert eine Zuordnung von Klartextzeichen zu Morsecode. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+const char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{main_8c_a52cb08aca68f680f4d8585f71e985f68}{encode\+\_\+char}} (char c)
+\begin{DoxyCompactList}\small\item\em Konvertiert ein einzelnes Zeichen in den zugehörigen Morsecode. \end{DoxyCompactList}\item 
+char \mbox{\hyperlink{main_8c_a7dc9299a7a4321dcf46b63d0b2eee314}{decode\+\_\+morse}} (const char \texorpdfstring{$\ast$}{*}code)
+\begin{DoxyCompactList}\small\item\em Wandelt einen Morsecode-\/\+String in ein einzelnes Zeichen zurück. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8c_a5641c8e6ccab0d15bfad0653bd07a301}{encode\+\_\+text}} (const char \texorpdfstring{$\ast$}{*}text, bool slash\+\_\+mode)
+\begin{DoxyCompactList}\small\item\em Codiert einen vollständigen Text in Morsecode und gibt ihn auf stdout aus. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8c_ae1f242aa3efeddf56a0573bf392f58c0}{decode\+\_\+text}} (const char \texorpdfstring{$\ast$}{*}morse\+\_\+input)
+\begin{DoxyCompactList}\small\item\em Dekodiert einen Morsecode-\/\+Text zu Klartext und gibt ihn aus. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8c_a853216ac51aa181669ff4d3de74058a7}{print\+\_\+help}} ()
+\begin{DoxyCompactList}\small\item\em Gibt eine detaillierte Hilfeübersicht mit allen verfügbaren Optionen aus. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8c_a31b1d2c3cac5e5580bae60f1f77b4297}{print\+\_\+programmer\+\_\+info}} ()
+\begin{DoxyCompactList}\small\item\em Gibt die Programmautoreninformationen im JSON-\/\+Format aus. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{main_8c_a3c04138a5bfe5d72780bb7e82a18e627}{main}} (int argc, char \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}argv)
+\begin{DoxyCompactList}\small\item\em Hauptfunktion\+: Steuert das Parsen der Kommandozeilenargumente und Programmablauf. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{struct_morse_mapping}{Morse\+Mapping}} \mbox{\hyperlink{main_8c_a77c9cdee81c2d87962f4da647af2f1db}{morse\+\_\+map}} \mbox{[}$\,$\mbox{]}
+\begin{DoxyCompactList}\small\item\em Statische Tabelle mit allen unterstützten Morsecode-\/\+Zuordnungen. \end{DoxyCompactList}\item 
+static const size\+\_\+t \mbox{\hyperlink{main_8c_a1ed3389efd9a09a78e38abb77f413b24}{map\+\_\+len}} = sizeof(\mbox{\hyperlink{main_8c_a77c9cdee81c2d87962f4da647af2f1db}{morse\+\_\+map}}) / sizeof(\mbox{\hyperlink{struct_morse_mapping}{Morse\+Mapping}})
+\begin{DoxyCompactList}\small\item\em Länge der Morsecode-\/\+Mapping-\/\+Tabelle. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{main_8c_a7dc9299a7a4321dcf46b63d0b2eee314}\index{main.c@{main.c}!decode\_morse@{decode\_morse}}
+\index{decode\_morse@{decode\_morse}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{decode\_morse()}{decode\_morse()}}
+{\footnotesize\ttfamily \label{main_8c_a7dc9299a7a4321dcf46b63d0b2eee314} 
+char decode\+\_\+morse (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{code}{}\end{DoxyParamCaption})}
+
+
+
+Wandelt einen Morsecode-\/\+String in ein einzelnes Zeichen zurück. 
+
+Die Funktion vergleicht den übergebenen Morsecode mit der Mapping-\/\+Tabelle und gibt das zugehörige Zeichen zurück. Bei einem unbekannten Code wird ein Stern (\textquotesingle{}\texorpdfstring{$\ast$}{*}\textquotesingle{}) zurückgegeben.
+
+
+\begin{DoxyParams}{Parameters}
+{\em code} & Nullterminierter String mit einem Morsecode (z.\+ B. "{}.-\/"{} für A). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Der Klartextbuchstabe (Großbuchstabe, Ziffer oder Symbol) oder \textquotesingle{}\texorpdfstring{$\ast$}{*}\textquotesingle{} bei Fehler. 
+\end{DoxyReturn}
+\Hypertarget{main_8c_ae1f242aa3efeddf56a0573bf392f58c0}\index{main.c@{main.c}!decode\_text@{decode\_text}}
+\index{decode\_text@{decode\_text}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{decode\_text()}{decode\_text()}}
+{\footnotesize\ttfamily \label{main_8c_ae1f242aa3efeddf56a0573bf392f58c0} 
+void decode\+\_\+text (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{morse\+\_\+input}{}\end{DoxyParamCaption})}
+
+
+
+Dekodiert einen Morsecode-\/\+Text zu Klartext und gibt ihn aus. 
+
+Wandelt Morsecode zurück in Klartext und gibt das Ergebnis aus.
+
+Die Funktion verarbeitet Morsezeichen, die durch Leerzeichen oder Slashes getrennt sind. Einfache Leerzeichen trennen Buchstaben, drei Leerzeichen oder ein Slash trennen Wörter.
+
+Ungültige Morsezeichen werden durch \textquotesingle{}\texorpdfstring{$\ast$}{*}\textquotesingle{} ersetzt. Zeilenumbrüche werden ignoriert.
+
+
+\begin{DoxyParams}{Parameters}
+{\em morse\+\_\+input} & Nullterminierter String mit Morsecode. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{main_8c_a52cb08aca68f680f4d8585f71e985f68}\index{main.c@{main.c}!encode\_char@{encode\_char}}
+\index{encode\_char@{encode\_char}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{encode\_char()}{encode\_char()}}
+{\footnotesize\ttfamily \label{main_8c_a52cb08aca68f680f4d8585f71e985f68} 
+const char \texorpdfstring{$\ast$}{*} encode\+\_\+char (\begin{DoxyParamCaption}\item[{char}]{c}{}\end{DoxyParamCaption})}
+
+
+
+Konvertiert ein einzelnes Zeichen in den zugehörigen Morsecode. 
+
+Konvertiert ein einzelnes alphanumerisches Zeichen in Morsecode.
+
+Das übergebene Zeichen wird in Großbuchstaben umgewandelt und mit der internen Morsecode-\/\+Tabelle verglichen. Wird keine passende Zuordnung gefunden, gibt die Funktion einen Stern (\textquotesingle{}\texorpdfstring{$\ast$}{*}\textquotesingle{}) zurück.
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & Das zu konvertierende Zeichen. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Zeiger auf den Morsecode-\/\+String oder "{}\texorpdfstring{$\ast$}{*}"{} bei unbekanntem Zeichen. 
+\end{DoxyReturn}
+\Hypertarget{main_8c_a5641c8e6ccab0d15bfad0653bd07a301}\index{main.c@{main.c}!encode\_text@{encode\_text}}
+\index{encode\_text@{encode\_text}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{encode\_text()}{encode\_text()}}
+{\footnotesize\ttfamily \label{main_8c_a5641c8e6ccab0d15bfad0653bd07a301} 
+void encode\+\_\+text (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{text}{, }\item[{bool}]{slash\+\_\+mode}{}\end{DoxyParamCaption})}
+
+
+
+Codiert einen vollständigen Text in Morsecode und gibt ihn auf stdout aus. 
+
+Wandelt einen kompletten Text in Morsecode um und gibt ihn aus.
+
+Die Funktion wandelt Zeichen des Eingabetexts entsprechend der Mapping-\/\+Tabelle in Morsecode um. Nicht unterstützte Zeichen werden als Stern (\textquotesingle{}\texorpdfstring{$\ast$}{*}\textquotesingle{}) dargestellt.
+
+Buchstaben werden durch ein Leerzeichen getrennt, Wörter wahlweise durch drei Leerzeichen oder (wenn {\ttfamily slash\+\_\+mode} aktiviert ist) durch den Separator "{} / "{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em text} & Nullterminierter C-\/\+String mit dem Eingabetext. \\
+\hline
+{\em slash\+\_\+mode} & true = Worttrennung mit Slash; false = drei Leerzeichen. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{main_8c_a3c04138a5bfe5d72780bb7e82a18e627}\index{main.c@{main.c}!main@{main}}
+\index{main@{main}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily \label{main_8c_a3c04138a5bfe5d72780bb7e82a18e627} 
+int main (\begin{DoxyParamCaption}\item[{int}]{argc}{, }\item[{char \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{argv}{}\end{DoxyParamCaption})}
+
+
+
+Hauptfunktion\+: Steuert das Parsen der Kommandozeilenargumente und Programmablauf. 
+
+Je nach Optionen wird die Eingabe als Datei oder über stdin gelesen und in Morsecode codiert oder dekodiert. Auch Optionen wie Hilfeausgabe, Programmer-\/\+Info und Dateiausgabe werden hier behandelt.
+
+
+\begin{DoxyParams}{Parameters}
+{\em argc} & Anzahl der übergebenen Argumente. \\
+\hline
+{\em argv} & Array der Argumente. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 bei Erfolg, 1 bei Fehlern. 
+\end{DoxyReturn}
+\Hypertarget{main_8c_a853216ac51aa181669ff4d3de74058a7}\index{main.c@{main.c}!print\_help@{print\_help}}
+\index{print\_help@{print\_help}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{print\_help()}{print\_help()}}
+{\footnotesize\ttfamily \label{main_8c_a853216ac51aa181669ff4d3de74058a7} 
+void print\+\_\+help (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Gibt eine detaillierte Hilfeübersicht mit allen verfügbaren Optionen aus. 
+
+Gibt eine strukturierte Hilfeübersicht für den Nutzer auf stdout aus. \Hypertarget{main_8c_a31b1d2c3cac5e5580bae60f1f77b4297}\index{main.c@{main.c}!print\_programmer\_info@{print\_programmer\_info}}
+\index{print\_programmer\_info@{print\_programmer\_info}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{print\_programmer\_info()}{print\_programmer\_info()}}
+{\footnotesize\ttfamily \label{main_8c_a31b1d2c3cac5e5580bae60f1f77b4297} 
+void print\+\_\+programmer\+\_\+info (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Gibt die Programmautoreninformationen im JSON-\/\+Format aus. 
+
+Gibt Informationen zum Autor des Programms im JSON-\/\+Format aus. 
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{main_8c_a1ed3389efd9a09a78e38abb77f413b24}\index{main.c@{main.c}!map\_len@{map\_len}}
+\index{map\_len@{map\_len}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{map\_len}{map\_len}}
+{\footnotesize\ttfamily \label{main_8c_a1ed3389efd9a09a78e38abb77f413b24} 
+const size\+\_\+t map\+\_\+len = sizeof(\mbox{\hyperlink{main_8c_a77c9cdee81c2d87962f4da647af2f1db}{morse\+\_\+map}}) / sizeof(\mbox{\hyperlink{struct_morse_mapping}{Morse\+Mapping}})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Länge der Morsecode-\/\+Mapping-\/\+Tabelle. 
+
+Wird zur Iteration über das {\ttfamily morse\+\_\+map}-\/Array verwendet. \Hypertarget{main_8c_a77c9cdee81c2d87962f4da647af2f1db}\index{main.c@{main.c}!morse\_map@{morse\_map}}
+\index{morse\_map@{morse\_map}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{morse\_map}{morse\_map}}
+{\footnotesize\ttfamily \label{main_8c_a77c9cdee81c2d87962f4da647af2f1db} 
+\mbox{\hyperlink{struct_morse_mapping}{Morse\+Mapping}} morse\+\_\+map\mbox{[}$\,$\mbox{]}\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \{}
+\DoxyCodeLine{\ \ \ \ \{\textcolor{stringliteral}{"{}A"{}},\ \textcolor{stringliteral}{"{}.-\/"{}}\},\ \{\textcolor{stringliteral}{"{}B"{}},\ \textcolor{stringliteral}{"{}-\/..."{}}\},\ \{\textcolor{stringliteral}{"{}C"{}},\ \textcolor{stringliteral}{"{}-\/.-\/."{}}\},\ \{\textcolor{stringliteral}{"{}D"{}},\ \textcolor{stringliteral}{"{}-\/.."{}}\},\ \{\textcolor{stringliteral}{"{}E"{}},\ \textcolor{stringliteral}{"{}."{}}\},}
+\DoxyCodeLine{\ \ \ \ \{\textcolor{stringliteral}{"{}F"{}},\ \textcolor{stringliteral}{"{}..-\/."{}}\},\ \{\textcolor{stringliteral}{"{}G"{}},\ \textcolor{stringliteral}{"{}-\/-\/."{}}\},\ \{\textcolor{stringliteral}{"{}H"{}},\ \textcolor{stringliteral}{"{}...."{}}\},\ \{\textcolor{stringliteral}{"{}I"{}},\ \textcolor{stringliteral}{"{}.."{}}\},\ \{\textcolor{stringliteral}{"{}J"{}},\ \textcolor{stringliteral}{"{}.-\/-\/-\/"{}}\},}
+\DoxyCodeLine{\ \ \ \ \{\textcolor{stringliteral}{"{}K"{}},\ \textcolor{stringliteral}{"{}-\/.-\/"{}}\},\ \{\textcolor{stringliteral}{"{}L"{}},\ \textcolor{stringliteral}{"{}.-\/.."{}}\},\ \{\textcolor{stringliteral}{"{}M"{}},\ \textcolor{stringliteral}{"{}-\/-\/"{}}\},\ \{\textcolor{stringliteral}{"{}N"{}},\ \textcolor{stringliteral}{"{}-\/."{}}\},\ \{\textcolor{stringliteral}{"{}O"{}},\ \textcolor{stringliteral}{"{}-\/-\/-\/"{}}\},}
+\DoxyCodeLine{\ \ \ \ \{\textcolor{stringliteral}{"{}P"{}},\ \textcolor{stringliteral}{"{}.-\/-\/."{}}\},\ \{\textcolor{stringliteral}{"{}Q"{}},\ \textcolor{stringliteral}{"{}-\/-\/.-\/"{}}\},\ \{\textcolor{stringliteral}{"{}R"{}},\ \textcolor{stringliteral}{"{}.-\/."{}}\},\ \{\textcolor{stringliteral}{"{}S"{}},\ \textcolor{stringliteral}{"{}..."{}}\},\ \{\textcolor{stringliteral}{"{}T"{}},\ \textcolor{stringliteral}{"{}-\/"{}}\},}
+\DoxyCodeLine{\ \ \ \ \{\textcolor{stringliteral}{"{}U"{}},\ \textcolor{stringliteral}{"{}..-\/"{}}\},\ \{\textcolor{stringliteral}{"{}V"{}},\ \textcolor{stringliteral}{"{}...-\/"{}}\},\ \{\textcolor{stringliteral}{"{}W"{}},\ \textcolor{stringliteral}{"{}.-\/-\/"{}}\},\ \{\textcolor{stringliteral}{"{}X"{}},\ \textcolor{stringliteral}{"{}-\/..-\/"{}}\},\ \{\textcolor{stringliteral}{"{}Y"{}},\ \textcolor{stringliteral}{"{}-\/.-\/-\/"{}}\},}
+\DoxyCodeLine{\ \ \ \ \{\textcolor{stringliteral}{"{}Z"{}},\ \textcolor{stringliteral}{"{}-\/-\/.."{}}\},}
+\DoxyCodeLine{\ \ \ \ \{\textcolor{stringliteral}{"{}0"{}},\ \textcolor{stringliteral}{"{}-\/-\/-\/-\/-\/"{}}\},\ \{\textcolor{stringliteral}{"{}1"{}},\ \textcolor{stringliteral}{"{}.-\/-\/-\/-\/"{}}\},\ \{\textcolor{stringliteral}{"{}2"{}},\ \textcolor{stringliteral}{"{}..-\/-\/-\/"{}}\},\ \{\textcolor{stringliteral}{"{}3"{}},\ \textcolor{stringliteral}{"{}...-\/-\/"{}}\},}
+\DoxyCodeLine{\ \ \ \ \{\textcolor{stringliteral}{"{}4"{}},\ \textcolor{stringliteral}{"{}....-\/"{}}\},\ \{\textcolor{stringliteral}{"{}5"{}},\ \textcolor{stringliteral}{"{}....."{}}\},\ \{\textcolor{stringliteral}{"{}6"{}},\ \textcolor{stringliteral}{"{}-\/...."{}}\},\ \{\textcolor{stringliteral}{"{}7"{}},\ \textcolor{stringliteral}{"{}-\/-\/..."{}}\},}
+\DoxyCodeLine{\ \ \ \ \{\textcolor{stringliteral}{"{}8"{}},\ \textcolor{stringliteral}{"{}-\/-\/-\/.."{}}\},\ \{\textcolor{stringliteral}{"{}9"{}},\ \textcolor{stringliteral}{"{}-\/-\/-\/-\/."{}}\},}
+\DoxyCodeLine{\ \ \ \ \{\textcolor{stringliteral}{"{}."{}},\ \textcolor{stringliteral}{"{}.-\/.-\/.-\/"{}}\},\ \{\textcolor{stringliteral}{"{},"{}},\ \textcolor{stringliteral}{"{}-\/-\/..-\/-\/"{}}\},\ \{\textcolor{stringliteral}{"{}:"{}},\ \textcolor{stringliteral}{"{}-\/-\/-\/..."{}}\},\ \{\textcolor{stringliteral}{"{};"{}},\ \textcolor{stringliteral}{"{}-\/.-\/.-\/."{}}\},}
+\DoxyCodeLine{\ \ \ \ \{\textcolor{stringliteral}{"{}?"{}},\ \textcolor{stringliteral}{"{}..-\/-\/.."{}}\},\ \{\textcolor{stringliteral}{"{}="{}},\ \textcolor{stringliteral}{"{}-\/...-\/"{}}\},\ \{\textcolor{stringliteral}{"{}-\/"{}},\ \textcolor{stringliteral}{"{}-\/....-\/"{}}\},\ \{\textcolor{stringliteral}{"{}+"{}},\ \textcolor{stringliteral}{"{}.-\/.-\/."{}}\},}
+\DoxyCodeLine{\ \ \ \ \{\textcolor{stringliteral}{"{}\_"{}},\ \textcolor{stringliteral}{"{}..-\/-\/.-\/"{}}\},\ \{\textcolor{stringliteral}{"{}("{}},\ \textcolor{stringliteral}{"{}-\/.-\/-\/."{}}\},\ \{\textcolor{stringliteral}{"{})"{}},\ \textcolor{stringliteral}{"{}-\/.-\/-\/.-\/"{}}\},\ \{\textcolor{stringliteral}{"{}/"{}},\ \textcolor{stringliteral}{"{}-\/..-\/."{}}\},}
+\DoxyCodeLine{\ \ \ \ \{\textcolor{stringliteral}{"{}@"{}},\ \textcolor{stringliteral}{"{}.-\/-\/.-\/."{}}\}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+Statische Tabelle mit allen unterstützten Morsecode-\/\+Zuordnungen. 
+
+Diese Tabelle enthält die vollständige Mapping-\/\+Tabelle für Buchstaben A–Z, Ziffern 0–9 sowie zugelassene Satz-\/ und Sonderzeichen. 

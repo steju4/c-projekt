@@ -1,0 +1,178 @@
+\doxysection{include/morse.h File Reference}
+\hypertarget{morse_8h}{}\label{morse_8h}\index{include/morse.h@{include/morse.h}}
+
+
+Header-\/\+Datei für das Morsecode-\/\+Tool.  
+
+
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+const char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{morse_8h_a52cb08aca68f680f4d8585f71e985f68}{encode\+\_\+char}} (char c)
+\begin{DoxyCompactList}\small\item\em Konvertiert ein einzelnes alphanumerisches Zeichen in Morsecode. \end{DoxyCompactList}\item 
+char \mbox{\hyperlink{morse_8h_a7dc9299a7a4321dcf46b63d0b2eee314}{decode\+\_\+morse}} (const char \texorpdfstring{$\ast$}{*}code)
+\begin{DoxyCompactList}\small\item\em Wandelt einen Morsecode-\/\+String in ein einzelnes Zeichen zurück. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{morse_8h_a5641c8e6ccab0d15bfad0653bd07a301}{encode\+\_\+text}} (const char \texorpdfstring{$\ast$}{*}text, bool slash\+\_\+mode)
+\begin{DoxyCompactList}\small\item\em Wandelt einen kompletten Text in Morsecode um und gibt ihn aus. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{morse_8h_ae1f242aa3efeddf56a0573bf392f58c0}{decode\+\_\+text}} (const char \texorpdfstring{$\ast$}{*}morse\+\_\+input)
+\begin{DoxyCompactList}\small\item\em Wandelt Morsecode zurück in Klartext und gibt das Ergebnis aus. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{morse_8h_a402ea961bfc2ffeee61e3a7c330b1559}{print\+\_\+help}} (void)
+\begin{DoxyCompactList}\small\item\em Gibt eine strukturierte Hilfeübersicht für den Nutzer auf stdout aus. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{morse_8h_a9d71213343e5bb63c8d4139c703cf524}{print\+\_\+programmer\+\_\+info}} (void)
+\begin{DoxyCompactList}\small\item\em Gibt Informationen zum Autor des Programms im JSON-\/\+Format aus. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Header-\/\+Datei für das Morsecode-\/\+Tool. 
+
+Diese Datei deklariert alle öffentlich zugänglichen Funktionen und Konstanten, die zum Codieren und Dekodieren von Morsezeichen benötigt werden. Sie wird von der \doxylink{main_8c}{main.\+c} verwendet und trennt Header-\/ und Implementierungscode. 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{morse_8h_a7dc9299a7a4321dcf46b63d0b2eee314}\index{morse.h@{morse.h}!decode\_morse@{decode\_morse}}
+\index{decode\_morse@{decode\_morse}!morse.h@{morse.h}}
+\doxysubsubsection{\texorpdfstring{decode\_morse()}{decode\_morse()}}
+{\footnotesize\ttfamily \label{morse_8h_a7dc9299a7a4321dcf46b63d0b2eee314} 
+char decode\+\_\+morse (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{code}{}\end{DoxyParamCaption})}
+
+
+
+Wandelt einen Morsecode-\/\+String in ein einzelnes Zeichen zurück. 
+
+Diese Funktion durchsucht die Morsecode-\/\+Mapping-\/\+Tabelle nach einer exakten Übereinstimmung mit dem übergebenen Morsecode-\/\+String und gibt das zugehörige Zeichen zurück. Bei ungültigen oder unbekannten Morsezeichen wird \textquotesingle{}\texorpdfstring{$\ast$}{*}\textquotesingle{} zurückgegeben.
+
+
+\begin{DoxyParams}{Parameters}
+{\em code} & Morsecode als nullterminierter String (z.\+ B. "{}-\/-\/..-\/-\/"{}). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Entsprechendes Klartextzeichen (A–Z, 0–9, Symbol) oder \textquotesingle{}\texorpdfstring{$\ast$}{*}\textquotesingle{} bei unbekanntem Code.
+\end{DoxyReturn}
+Die Funktion vergleicht den übergebenen Morsecode mit der Mapping-\/\+Tabelle und gibt das zugehörige Zeichen zurück. Bei einem unbekannten Code wird ein Stern (\textquotesingle{}\texorpdfstring{$\ast$}{*}\textquotesingle{}) zurückgegeben.
+
+
+\begin{DoxyParams}{Parameters}
+{\em code} & Nullterminierter String mit einem Morsecode (z.\+ B. "{}.-\/"{} für A). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Der Klartextbuchstabe (Großbuchstabe, Ziffer oder Symbol) oder \textquotesingle{}\texorpdfstring{$\ast$}{*}\textquotesingle{} bei Fehler. 
+\end{DoxyReturn}
+\Hypertarget{morse_8h_ae1f242aa3efeddf56a0573bf392f58c0}\index{morse.h@{morse.h}!decode\_text@{decode\_text}}
+\index{decode\_text@{decode\_text}!morse.h@{morse.h}}
+\doxysubsubsection{\texorpdfstring{decode\_text()}{decode\_text()}}
+{\footnotesize\ttfamily \label{morse_8h_ae1f242aa3efeddf56a0573bf392f58c0} 
+void decode\+\_\+text (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{morse\+\_\+input}{}\end{DoxyParamCaption})}
+
+
+
+Wandelt Morsecode zurück in Klartext und gibt das Ergebnis aus. 
+
+Diese Funktion verarbeitet eine Morsecode-\/\+Zeile, bei der Morsezeichen durch Leerzeichen und Wörter durch drei Leerzeichen oder "{}/"{} getrennt sind. Unbekannte Morsezeichen werden durch \textquotesingle{}\texorpdfstring{$\ast$}{*}\textquotesingle{} ersetzt.
+
+
+\begin{DoxyParams}{Parameters}
+{\em morse\+\_\+input} & Nullterminierter String mit Morsecode.\\
+\hline
+\end{DoxyParams}
+Wandelt Morsecode zurück in Klartext und gibt das Ergebnis aus.
+
+Die Funktion verarbeitet Morsezeichen, die durch Leerzeichen oder Slashes getrennt sind. Einfache Leerzeichen trennen Buchstaben, drei Leerzeichen oder ein Slash trennen Wörter.
+
+Ungültige Morsezeichen werden durch \textquotesingle{}\texorpdfstring{$\ast$}{*}\textquotesingle{} ersetzt. Zeilenumbrüche werden ignoriert.
+
+
+\begin{DoxyParams}{Parameters}
+{\em morse\+\_\+input} & Nullterminierter String mit Morsecode. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{morse_8h_a52cb08aca68f680f4d8585f71e985f68}\index{morse.h@{morse.h}!encode\_char@{encode\_char}}
+\index{encode\_char@{encode\_char}!morse.h@{morse.h}}
+\doxysubsubsection{\texorpdfstring{encode\_char()}{encode\_char()}}
+{\footnotesize\ttfamily \label{morse_8h_a52cb08aca68f680f4d8585f71e985f68} 
+const char \texorpdfstring{$\ast$}{*} encode\+\_\+char (\begin{DoxyParamCaption}\item[{char}]{c}{}\end{DoxyParamCaption})}
+
+
+
+Konvertiert ein einzelnes alphanumerisches Zeichen in Morsecode. 
+
+Diese Funktion sucht das übergebene Zeichen in der internen Mapping-\/\+Tabelle und gibt den zugehörigen Morsecode-\/\+String zurück. Zeichen, die nicht enthalten sind (z.\+ B. Umlaute oder Sonderzeichen außerhalb des definierten Umfangs), werden durch einen Stern (\textquotesingle{}\texorpdfstring{$\ast$}{*}\textquotesingle{}) dargestellt.
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & Das zu codierende Zeichen (Groß-\//\+Kleinbuchstabe, Ziffer oder Symbol). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Zeiger auf den Morsecode als nullterminierten String oder "{}\texorpdfstring{$\ast$}{*}"{} bei Fehler.
+\end{DoxyReturn}
+Konvertiert ein einzelnes alphanumerisches Zeichen in Morsecode.
+
+Das übergebene Zeichen wird in Großbuchstaben umgewandelt und mit der internen Morsecode-\/\+Tabelle verglichen. Wird keine passende Zuordnung gefunden, gibt die Funktion einen Stern (\textquotesingle{}\texorpdfstring{$\ast$}{*}\textquotesingle{}) zurück.
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & Das zu konvertierende Zeichen. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Zeiger auf den Morsecode-\/\+String oder "{}\texorpdfstring{$\ast$}{*}"{} bei unbekanntem Zeichen. 
+\end{DoxyReturn}
+\Hypertarget{morse_8h_a5641c8e6ccab0d15bfad0653bd07a301}\index{morse.h@{morse.h}!encode\_text@{encode\_text}}
+\index{encode\_text@{encode\_text}!morse.h@{morse.h}}
+\doxysubsubsection{\texorpdfstring{encode\_text()}{encode\_text()}}
+{\footnotesize\ttfamily \label{morse_8h_a5641c8e6ccab0d15bfad0653bd07a301} 
+void encode\+\_\+text (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{text}{, }\item[{bool}]{slash\+\_\+mode}{}\end{DoxyParamCaption})}
+
+
+
+Wandelt einen kompletten Text in Morsecode um und gibt ihn aus. 
+
+Die Funktion nimmt einen beliebigen C-\/\+String entgegen und konvertiert jedes Zeichen in das entsprechende Morsezeichen. Wörter werden je nach Einstellung durch "{} / "{} oder drei Leerzeichen getrennt. Nicht abbildbare Zeichen führen zu einem Stern (\textquotesingle{}\texorpdfstring{$\ast$}{*}\textquotesingle{}) in der Ausgabe.
+
+
+\begin{DoxyParams}{Parameters}
+{\em text} & Eingabetext als nullterminierter C-\/\+String. \\
+\hline
+{\em slash\+\_\+mode} & true, wenn Worttrennung mit "{}/"{} erfolgen soll; false für 3\texorpdfstring{$\ast$}{*} "{}\+SPACE"{}.\\
+\hline
+\end{DoxyParams}
+Wandelt einen kompletten Text in Morsecode um und gibt ihn aus.
+
+Die Funktion wandelt Zeichen des Eingabetexts entsprechend der Mapping-\/\+Tabelle in Morsecode um. Nicht unterstützte Zeichen werden als Stern (\textquotesingle{}\texorpdfstring{$\ast$}{*}\textquotesingle{}) dargestellt.
+
+Buchstaben werden durch ein Leerzeichen getrennt, Wörter wahlweise durch drei Leerzeichen oder (wenn {\ttfamily slash\+\_\+mode} aktiviert ist) durch den Separator "{} / "{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em text} & Nullterminierter C-\/\+String mit dem Eingabetext. \\
+\hline
+{\em slash\+\_\+mode} & true = Worttrennung mit Slash; false = drei Leerzeichen. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{morse_8h_a402ea961bfc2ffeee61e3a7c330b1559}\index{morse.h@{morse.h}!print\_help@{print\_help}}
+\index{print\_help@{print\_help}!morse.h@{morse.h}}
+\doxysubsubsection{\texorpdfstring{print\_help()}{print\_help()}}
+{\footnotesize\ttfamily \label{morse_8h_a402ea961bfc2ffeee61e3a7c330b1559} 
+void print\+\_\+help (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Gibt eine strukturierte Hilfeübersicht für den Nutzer auf stdout aus. 
+
+Die Hilfe listet alle verfügbaren Optionen, Flags und deren Beschreibung auf.
+
+Gibt eine strukturierte Hilfeübersicht für den Nutzer auf stdout aus. \Hypertarget{morse_8h_a9d71213343e5bb63c8d4139c703cf524}\index{morse.h@{morse.h}!print\_programmer\_info@{print\_programmer\_info}}
+\index{print\_programmer\_info@{print\_programmer\_info}!morse.h@{morse.h}}
+\doxysubsubsection{\texorpdfstring{print\_programmer\_info()}{print\_programmer\_info()}}
+{\footnotesize\ttfamily \label{morse_8h_a9d71213343e5bb63c8d4139c703cf524} 
+void print\+\_\+programmer\+\_\+info (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Gibt Informationen zum Autor des Programms im JSON-\/\+Format aus. 
+
+Enthält Vorname, Nachname, Studiengang und E-\/\+Mail-\/\+Adresse.
+
+Gibt Informationen zum Autor des Programms im JSON-\/\+Format aus. 
